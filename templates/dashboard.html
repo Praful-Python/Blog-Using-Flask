@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container">
+  <a class="btn btn-primary" href="edit/add_blog">Add blog</a>
+  <a class="btn btn-primary" href="logout">Logout</a>
+  <h2>Update Yorr Blog</h2>
+  <p>You can change OR edit yor article</p>  
+  <h3>Upload File</h3>
+  <h1>EDIT</h1> 
+  {% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+         {{ message }}
+      {% endfor %}
+   {% endif %}
+{% endwith %}         
+  <table class="table">
+    <thead>
+      <tr>
+        <th>SR_NO</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Date & Time</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for blog in blog %}
+      <tr>
+        <td class="btn btn-primary">{{blog.no}}</td>
+        <td><a href="blogs/{{ blog.slug }}" class="btn btn-primary">{{blog.title}}</a></td>
+        <td>{{blog.content[0:50]}}...</td>
+
+        <td>{{blog.date}}</td>
+        <td><a class="btn btn-primary" href="edit/{{blog.no}}">edit</a></td>
+        <td><a class="btn btn-primary" href="delete/{{blog.no}}">delete</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

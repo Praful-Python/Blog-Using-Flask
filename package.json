@@ -1,0 +1,19 @@
+{
+    "scripts": {
+        "title": "PyPra Portfolio",
+        "name": "Praful Rathod",
+        "version": "5.0.7",
+        "start": "node_modules/.bin/gulp watch",
+        "no_of_post": 2,
+        "username": "praful",
+        "password": "Rathod@4938",
+        "uploader_location": "C:\\Users\\Shashan\\PycharmProjects\\PyPra\\static\\img",
+        "gmail-user": "prafulrathod1818@gmail.com"
+    },
+    "database": {
+        "local_server": "true",
+        "local_url": "mysql://root:@localhost/pypra",
+        "prod_url": "mysql://root:@localhost/pypra"
+    }
+}
+
