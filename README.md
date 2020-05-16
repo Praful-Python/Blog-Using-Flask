@@ -8,5 +8,6 @@ In this Blog's Backend we have used...
 	5.Json
 	6.Login with Session
 	7.Delete
+	8.BootStrap Template
 	
 I have Created admin panel for add or delete Blog detail with database
