@@ -1,1 +1,1 @@
-web: gunicorn PyPra:app
+web: gunicorn wsgi:app
