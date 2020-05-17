@@ -147,6 +147,7 @@ def blogconfig(blog_slug):
 def blog():
     blog = Blog.query.filter_by().all()
     print(dir(blog))
+    """
     last = math.ceil(len(blog)/int(scripts['no_of_post']))
     #print(last)
     page = request.args.get('page')
@@ -162,17 +163,14 @@ def blog():
         next = "#"
     else:
         prev = "blogs?page="+str(page-1)
-        next = "blogs?page="+str(page+1)
-    return render_template('blog.html', scripts=scripts, database=database, blog=blog, prev=prev, next=next)
+        next = "blogs?page="+str(page+1)"""
+    return render_template('blog.html', scripts=scripts, database=database, blog=blog)
 
-
-"""
 @app.route("/blogs/<int:page_num>")
 def blog_paginate(page_num):
     blog = Blog.query.paginate(per_page=1, page=page_num, error_out=True)
-    blog = blog.__iter__()
     return render_template('blog.html', scripts=scripts, database=database, blog=blog)
-"""
+
 
 @app.route("/Login")
 def login():
