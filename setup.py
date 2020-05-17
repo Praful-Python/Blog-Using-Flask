@@ -8,10 +8,10 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'
 
-with open('package.json', 'r') as c:
+with open('PyPraa.json', 'r') as c:
     scripts = json.load(c)["scripts"]
 
-with open('package.json', 'r') as d:
+with open('PyPraa.json', 'r') as d:
     database = json.load(d)["database"]
 
 app.config.update(
