@@ -1,18 +1,1 @@
-{
-  "name": "game_test",
-  "author": "Ilya",
-  "description": "A test app for our board game",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app"
-  },
-  "dependencies": {
-    "express": "3.0.6",
-    "jade": "*",
-    "socket.io" : "*"
-  },
- "engines": {
-      "node": "12.11.1"
-  }
-}
+
