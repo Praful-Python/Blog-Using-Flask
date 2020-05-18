@@ -35,7 +35,7 @@ if ENV == 'dev':
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:rathod@78743@localhost:5432/Pypra'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://pnfsnqiwhfjird:1b7d60236a98534127768c2c07781fd3620f0ce749d654b20c8f7e3bc2e41b9b@ec2-52-44-55-63.compute-1.amazonaws.com:5432/ddohaja41e9r55'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://pavtggkuawuzyz:cdbee2771fa6d981bfdbfcc3145b2834a3b5aedcdbf3f83d630bb0e22a16cc02@ec2-52-202-146-43.compute-1.amazonaws.com:5432/d5kq020v7piocn'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = scripts['uploader_location']
