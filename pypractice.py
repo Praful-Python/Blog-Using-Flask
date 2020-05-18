@@ -22,20 +22,15 @@ app.config.update(
     MAIL_PASSWORD=scripts['password']
 )
 mail = Mail(app)
-"""
-if():
-    app.config['SQLALCHEMY_DATABASE_URI'] = database['local_url']
-else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = database['prod_url']
-"""
-ENV = 'prod'
+
+ENV = 'dev'
 
 if ENV == 'dev':
     app.debug = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:rathod@78743@localhost:5432/Pypra'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://pnfsnqiwhfjird:1b7d60236a98534127768c2c07781fd3620f0ce749d654b20c8f7e3bc2e41b9b@ec2-52-44-55-63.compute-1.amazonaws.com:5432/ddohaja41e9r55'
+    app.config['SQLALCHEMY_DATABASE_URI'] = ''
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = scripts['uploader_location']
@@ -80,11 +75,10 @@ class Blog(db.Model):
         self.img_file = img_file
         self.date = date
 
-
 @app.route("/contact", methods = ['GET','POST'])
 def index():
     if (request.method == 'POST'):
-        '''Add try to the database'''
+        '''Add ry to the database'''
         '''
         no, name email, mobile_number, message, d&t
         '''
@@ -113,7 +107,7 @@ def add_blog():
             edit_slug = request.form.get('slug')
             edit_date = datetime.now()
             edit_img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(edit_img_file.filename)))
-            blog = Blog(title=edit_title, content=edit_content, tafline=edit_tagline, slug=edit_slug, img_file=edit_img_file.filename, date=edit_date)
+            blog = Blog(title=edit_title, content=edit_content, tagline=edit_tagline, slug=edit_slug, img_file=edit_img_file.filename, date=edit_date)
             db.session.add(blog)
             db.session.commit()
             blog = Blog.query.filter_by().all()[0:scripts['no_of_post']]
@@ -136,7 +130,7 @@ def edit(sno):
             blog = Blog.query.filter_by(no=sno).first()
             blog.title = edit_title
             blog.content = edit_content
-            blog.tafline = edit_tagline
+            blog.tagline = edit_tagline
             blog.img_file = edit_img_file.filename
             blog.data = edit_date
             blog.slug = edit_slug
