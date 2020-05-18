@@ -28,6 +28,7 @@ if():
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = database['prod_url']
 
+
 app.config['UPLOAD_FOLDER'] = scripts['uploader_location']
 
 db = SQLAlchemy(app)
@@ -147,14 +148,12 @@ def blogconfig(blog_slug):
 def blog():
     blog = Blog.query.filter_by().all()
     print(dir(blog))
-    """
     last = math.ceil(len(blog)/int(scripts['no_of_post']))
-    #print(last)
     page = request.args.get('page')
     if(not str(page).isnumeric()):
         page = 1
     page = int(page)
-    blog = blog[(page-1)*int(scripts['no_of_post']): (page-1)*int(scripts['no_of_post']) + int(scripts['no_of_post'])]
+    blog = blog[(page-1)*int(scripts['no_of_post']):(page-1)*int(scripts['no_of_post']) + int(scripts['no_of_post'])]
     if(page==1):
         prev="#"
         next = "blogs?page="+str(page+1)
@@ -163,19 +162,15 @@ def blog():
         next = "#"
     else:
         prev = "blogs?page="+str(page-1)
-        next = "blogs?page="+str(page+1)"""
-    return render_template('blog.html', scripts=scripts, database=database, blog=blog)
+        next = "blogs?page="+str(page+1)
+    return render_template('blog.html', scripts=scripts, database=database, blog=blog, prev=prev, next=next)
 
-@app.route("/blogs/<int:page_num>")
-def blog_paginate(page_num):
-    blog = Blog.query.paginate(per_page=1, page=page_num, error_out=True)
-    return render_template('blog.html', scripts=scripts, database=database, blog=blog)
 
 
 @app.route("/Login")
 def login():
     if not session.get('logged_in'):
-        return render_template('login.html',scripts=scripts)
+        return render_template('login.html', scripts=scripts)
     else:
         blog = Blog.query.filter_by().all()
         return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)

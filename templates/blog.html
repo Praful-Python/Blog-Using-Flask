@@ -25,25 +25,10 @@
         </div>
         {% endfor %}
         <div class="clearfix">
-    <a class="btn btn-primary float-right" href="{{next}}">Newer Posts &rarr;</a>
-    <a class="btn btn-primary float-left" href="{{prev}}">&larr; Older Posts</a>
-
-  {% macro render_pagination(pagination, blog) %}
-    <ul class="pagination">
-  {% for page in blog.iter_pages() %}
-  {% if page %}
-   <li class="page-item"><a class="page-link" href="{{ url_for('blog', page_num=page) }}">{{ page }}</a></li>
-  {% else %}
-   <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li> 
-  {% endif %}
-  {% endfor %}
-   </ul>
-   {% endmacro %}
-  </div>
-
-
+          <a class="btn btn-primary float-right" href="{{next}}">Newer Posts &rarr;</a>
+          <a class="btn btn-primary float-left" href="{{prev}}">&larr; Older Posts</a>
+        </div>
       </div>
-
     </div>
     <!-- /.row -->
 
