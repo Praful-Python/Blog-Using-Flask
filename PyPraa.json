@@ -5,7 +5,11 @@
         "name": "Praful Rathod",
         "no_of_post": 2,
         "username": "praful",
+<<<<<<< HEAD
         "password": "Rathod@4938",
+=======
+        "password": "rathod@4938",
+>>>>>>> cce435aca30cae91f313e38496f938266ae0db01
         "uploader_location": "C:\\Users\\Shashan\\PycharmProjects\\PyPra\\static\\img",
         "gmail-user": "prafulrathod1818@gmail.com"
     },

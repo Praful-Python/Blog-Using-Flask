@@ -28,6 +28,7 @@ if():
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = database['prod_url']
 
+<<<<<<< HEAD
 # ENV = 'prod'
 #
 # if ENV == 'dev':
@@ -38,6 +39,9 @@ else:
 #     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://pavtggkuawuzyz:cdbee2771fa6d981bfdbfcc3145b2834a3b5aedcdbf3f83d630bb0e22a16cc02@ec2-52-202-146-43.compute-1.amazonaws.com:5432/d5kq020v7piocn'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+=======
+
+>>>>>>> cce435aca30cae91f313e38496f938266ae0db01
 app.config['UPLOAD_FOLDER'] = scripts['uploader_location']
 
 db = SQLAlchemy(app)
@@ -238,6 +242,19 @@ def blog():
         prev = "blogs?page="+str(page-1)
         next = "blogs?page="+str(page+1)
     return render_template('blog.html', scripts=scripts, database=database, blog=blog, prev=prev, next=next)
+<<<<<<< HEAD
+=======
+
+
+
+@app.route("/Login")
+def login():
+    if not session.get('logged_in'):
+        return render_template('login.html', scripts=scripts)
+    else:
+        blog = Blog.query.filter_by().all()
+        return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)
+>>>>>>> cce435aca30cae91f313e38496f938266ae0db01
 
 @app.route("/logout")
 def logout():
