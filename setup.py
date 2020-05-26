@@ -22,20 +22,20 @@ app.config.update(
     MAIL_PASSWORD=scripts['password']
 )
 mail = Mail(app)
-"""
+
 if():
     app.config['SQLALCHEMY_DATABASE_URI'] = database['local_url']
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = database['prod_url']
-"""
-ENV = 'prod'
 
-if ENV == 'dev':
-    app.debug = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:rathod@78743@localhost:5432/Pypra'
-else:
-    app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://pavtggkuawuzyz:cdbee2771fa6d981bfdbfcc3145b2834a3b5aedcdbf3f83d630bb0e22a16cc02@ec2-52-202-146-43.compute-1.amazonaws.com:5432/d5kq020v7piocn'
+# ENV = 'prod'
+#
+# if ENV == 'dev':
+#     app.debug = True
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:rathod@78743@localhost:5432/Pypra'
+# else:
+#     app.debug = False
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://pavtggkuawuzyz:cdbee2771fa6d981bfdbfcc3145b2834a3b5aedcdbf3f83d630bb0e22a16cc02@ec2-52-202-146-43.compute-1.amazonaws.com:5432/d5kq020v7piocn'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = scripts['uploader_location']
@@ -80,6 +80,15 @@ class Blog(db.Model):
         self.img_file = img_file
         self.date = date
 
+class User(db.Model):
+    __tablename__ = 'user'
+    uid = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(200), nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
 
 @app.route("/contact", methods = ['GET','POST'])
 def index():
@@ -113,10 +122,10 @@ def add_blog():
             edit_slug = request.form.get('slug')
             edit_date = datetime.now()
             edit_img_file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(edit_img_file.filename)))
-            blog = Blog(title=edit_title, content=edit_content, tafline=edit_tagline, slug=edit_slug, img_file=edit_img_file.filename, date=edit_date)
+            blog = Blog(title=edit_title, content=edit_content, tagline=edit_tagline, slug=edit_slug, img_file=edit_img_file.filename, date=edit_date)
             db.session.add(blog)
             db.session.commit()
-            blog = Blog.query.filter_by().all()[0:scripts['no_of_post']]
+            #blog = Blog.query.filter_by().all()[0:scripts['no_of_post']]
             return redirect('/blogs')
         #blog = Blog.query.filter_by().all()[0:scripts['no_of_post']]
         return render_template('add_blog.html', scripts=scripts, database=database)
@@ -136,7 +145,7 @@ def edit(sno):
             blog = Blog.query.filter_by(no=sno).first()
             blog.title = edit_title
             blog.content = edit_content
-            blog.tafline = edit_tagline
+            blog.tagline = edit_tagline
             blog.img_file = edit_img_file.filename
             blog.data = edit_date
             blog.slug = edit_slug
@@ -146,24 +155,62 @@ def edit(sno):
     return render_template('edit.html', scripts=scripts, database=database, blog=blog)
 
 
-@app.route("/dashboard", methods= ['POST', 'GET'])
+@app.route("/dashboard", methods=['POST', 'GET'])
 def do_admin_login():
     if session.get('logged_in'):
         blog = Blog.query.filter_by().all()
         return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)
 
-    if request.form.get('name') == scripts['username'] and request.form.get('password') == scripts['password']:
-        session['logged_in'] = True
-        flash("You are successfully logged in")
-        blog = Blog.query.filter_by().all()
-        return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)
-    else:
-        flash('wrong password!')
-        return login()
+    if(request.method=='POST'):
+        user = User.query.filter_by(username=request.form.get('name'), password=request.form.get('password')).first()
+        if user is not None:
+            session['logged_in'] = True
+            flash("You are successfully logged in")
+            blog = Blog.query.filter_by().all()
+            return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)
+        else:
+            flash("wrong credential")
+            return render_template('login.html', scripts=scripts, database=database)
+
+
+# @app.route("/dashboard", methods=['POST', 'GET'])
+# def do_admin_login():
+#     if session.get('logged_in'):
+#         blog = Blog.query.filter_by().all()
+#         return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)
+#
+#     if request.form.get('name') == scripts['username'] and request.form.get('password') == scripts['password']:
+#         session['logged_in'] = True
+#         flash("You are successfully logged in")
+#         blog = Blog.query.filter_by().all()
+#         return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)
+#     else:
+#         flash('wrong password!')
+#         return login()
+
+
 
 @app.route("/")
 def home():
     return render_template('index.html', scripts=scripts, database=database)
+
+
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
+    if (request.method == 'POST'):
+        existing_user = User.query.filter_by(username=request.form.get('email')).first()
+        if existing_user is None:
+            username = request.form.get('email')
+            password = request.form.get('password')
+            user = User(username=username, password=password)
+            db.session.add(user)
+            db.session.commit()
+            return render_template('signup.html', scripts=scripts, database=database)
+        else:
+            flash("User already Exist")
+            return render_template('signup.html', scripts=scripts, database=database)
+    return render_template('signup.html', scripts=scripts, database=database)
+
 
 @app.route("/blogs/<string:blog_slug>", methods = ['GET', 'POST'])
 def blogconfig(blog_slug):
@@ -191,16 +238,6 @@ def blog():
         prev = "blogs?page="+str(page-1)
         next = "blogs?page="+str(page+1)
     return render_template('blog.html', scripts=scripts, database=database, blog=blog, prev=prev, next=next)
-
-
-
-@app.route("/Login")
-def login():
-    if not session.get('logged_in'):
-        return render_template('login.html', scripts=scripts)
-    else:
-        blog = Blog.query.filter_by().all()
-        return render_template('dashboard.html', scripts=scripts, database=database, blog=blog)
 
 @app.route("/logout")
 def logout():
